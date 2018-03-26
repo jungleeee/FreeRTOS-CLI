@@ -52,7 +52,7 @@
 int main(void)
 {
     /* Infinite */ 
-    NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x08010000);
+    NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x08000000);
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
     __set_FAULTMASK(1);                 /* close all interrupt */
     
