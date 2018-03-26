@@ -5,7 +5,7 @@
   * @Mail         : Mail
   * @Created Time : 2018年3月22日 9:25:59
   * @Version      : V1.0
-  * @Last Changed : 2018年3月26日 10:12:04
+  * @Last Changed : Mon 26 Mar 2018 03:02:46 PM CST
   * @Brief        : brief
   ********************************************************************************
   */
@@ -26,7 +26,7 @@ enum DEBUG_PRINT_INDEX {
 };
 
 typedef union {
-    struct {//search bit-field
+    struct {//baidu or google, search bit-field
 		unsigned int CLI	    :1;//LSB
 		unsigned int SYS		:1;
 		unsigned int COM        :1;
