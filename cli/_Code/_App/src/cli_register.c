@@ -1,4 +1,3 @@
-/************************** Coopyright (C) Jungleeee 2018 *******END OF FILE*******/
 /**
   ********************************************************************************
   * @File Name    : cli_register.c
@@ -6,7 +5,7 @@
   * @Mail         : Mail
   * @Created Time : 2018年3月20日 10:21:43
   * @Version      : V1.0
-  * @Last Changed : 2018年3月22日 10:31:54
+  * @Last Changed : 2018年3月27日 13:13:26
   * @Brief        : brief
   ********************************************************************************
   */
@@ -59,7 +58,7 @@ static const CLI_Command_Definition_t xRegisteredCommands[] =
 {
 	{"info", "\r\n\tinfo: Display system version information.",   (const CLI_Command_Definition_t *)NULL, (pfCOMMAND_LINE_CALLBACK)infoSysVersion},
 	{"SYS",  "\r\n\tSYS : Enter the system debug submenu.",       xSysCommandSubMenu,                     (pfCOMMAND_LINE_CALLBACK)NULL},
-	{"TEST", "\r\n\tELSE: Enter the system test submenu.",        xTestCommandSubMenu,                    (pfCOMMAND_LINE_CALLBACK)NULL},
+	{"TEST", "\r\n\tTEST: Enter the system test submenu.",        xTestCommandSubMenu,                    (pfCOMMAND_LINE_CALLBACK)NULL},
 	CLI_Command_Definition_t_End
 };
 static const CLI_Command_Definition_t *psCommand = xRegisteredCommands;

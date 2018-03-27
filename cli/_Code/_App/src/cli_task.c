@@ -5,7 +5,7 @@
   * @Mail         : Mail
   * @Created Time : 2018年3月20日 11:18:51
   * @Version      : V1.0
-  * @Last Changed : Mon 26 Mar 2018 03:04:02 PM CST
+  * @Last Changed : 2018年3月27日 13:13:33
   * @Brief        : brief
   ********************************************************************************
   */
@@ -38,14 +38,17 @@
 #define     cli_cmdASCII_DEL		    (0x7F)
 #define     cli_cmdASCII_BACKSPACE      (0x08)
 
-#define     cli_MAX_TX_QUEUE_NUM        20
+#define     cli_MAX_TX_QUEUE_DEPTH      20
+
+#define     cli_MAX_RX_QUEUE_LEN        100         /* Define receive queue parameters. */
+#define     cli_MAX_RX_INPUT_SIZE		50
+
+#define     cli_MAX_RX_QUEUE_WAIT       0
 
 #define     cli_MAX_TX_QUEUE_WAIT       0
-#define     cli_MAX_RX_QUEUE_WAIT       0
-#define     cli_MAX_TX_SEND_OVER_WAIT   300
-#define     cli_MAX_MUTEX_WAIT          200
+#define     cli_MAX_TX_BINARY_DMA_WAIT  20
 
-#define     cli_MAX_INPUT_SIZE		    50
+#define     cli_MAX_MUTEX_WAIT          200
 
 /* Private macro define --------------------------------------------------------*/
 #define     cliCommondInfo(...)         {\
@@ -64,7 +67,7 @@ static xSemaphoreHandle xSerialSendCompleteBinary = NULL;
 static xSemaphoreHandle xSerialSendMutex = NULL;
 
 static const char * const pcWelcomeMessageString = "\r\n Command line tool server.\r\n Intput 'help' to press enter to view the help information.\r\n\r";
-static const char * const pcNULLLineString = "                                                  ";//length: cli_MAX_INPUT_SIZE
+static const char * const pcNULLLineString = "                                                  ";//length: cli_MAX_RX_INPUT_SIZE
 static const char * const pcNewLineString  = "\r\n";
 
 const char * pcMenuNameString = NULL;
@@ -81,7 +84,7 @@ volatile CLI_DEBUG_PEINT_STATUS xCliDebugStatus;//CLI,SYS: default open;
 static void cli_task_receive(void *pvParameters)
 {
     static signed char cRxedChar;
-    static char cInputString[cli_MAX_INPUT_SIZE], cLastInputString[cli_MAX_INPUT_SIZE] = {"cd /"};
+    static char cInputString[cli_MAX_RX_INPUT_SIZE], cLastInputString[cli_MAX_RX_INPUT_SIZE] = {"cd /"};
     uint8_t xInputStringIndex = 0;
 
     debugPrintInfo(SYS_isDebugOn, pcWelcomeMessageString);
@@ -107,7 +110,7 @@ static void cli_task_receive(void *pvParameters)
 
     				strcpy(cLastInputString, cInputString);
     				xInputStringIndex = 0;
-    				memset(cInputString, 0x00, cli_MAX_INPUT_SIZE);
+    				memset(cInputString, 0x00, cli_MAX_RX_INPUT_SIZE);
 
                     cliNewLineInfo;
                 }
@@ -126,7 +129,7 @@ static void cli_task_receive(void *pvParameters)
     					/* A character was entered.  Add it to the string entered so far.
     					When a \n is entered the complete string will be passed to the command interpreter. */
     					if((cRxedChar >= ' ') && (cRxedChar <= '~')) {
-    						if(xInputStringIndex < (cli_MAX_INPUT_SIZE - 1)) {
+    						if(xInputStringIndex < (cli_MAX_RX_INPUT_SIZE - 1)) {
     							cInputString[xInputStringIndex] = cRxedChar;
     							xInputStringIndex++;
     						}
@@ -154,8 +157,7 @@ static void cli_task_send(void *pvParameters)
 	for( ;; ) {
         if(xQueueReceive(xSerialSendCharsQueue, &cOutputQueuePull, cli_MAX_TX_QUEUE_WAIT) == pdTRUE) {
             serial_cli_print_info(cOutputQueuePull, strlen((const char *)cOutputQueuePull));
-            xSemaphoreTake(xSerialSendCompleteBinary, portMAX_DELAY);/* wait the DMA send over, start next */
-            vTaskDelay(cli_MAX_TX_QUEUE_BUG_WAIT);/* solve bug */
+            xSemaphoreTake(xSerialSendCompleteBinary, cli_MAX_TX_BINARY_DMA_WAIT);/* Wait the DMA send over & Start next */
         }
     }
 }
@@ -193,11 +195,64 @@ static void cli_send_frame_over_callback(void)
   */
 void cli_print_info(void)
 {
+    UBaseType_t uxSavedInterruptStatus;//Interrupted critical area
+    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();//Interrupted critical area
+
     portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
     xQueueSendFromISR(xSerialSendCharsQueue, cCliOutputString, &xHigherPriorityTaskWoken);
     portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
+
+    taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);//Interrupted critical area
 }
 
+//static void Test1(void *pvParameters)
+//{
+//	for( ;; ) {
+//            vTaskDelay(100);/* solve bug */
+//    }
+//}
+//static void Test2(void *pvParameters)
+//{
+//	for( ;; ) {
+//            vTaskDelay(100);/* solve bug */
+//    }
+//}
+//static void Test3(void *pvParameters)
+//{
+//	for( ;; ) {
+//            vTaskDelay(100);/* solve bug */
+//    }
+//}
+//static void Test4(void *pvParameters)
+//{
+//	for( ;; ) {
+//            vTaskDelay(100);/* solve bug */
+//    }
+//}
+//static void Test5(void *pvParameters)
+//{
+//	for( ;; ) {
+//            vTaskDelay(100);/* solve bug */
+//    }
+//}
+//static void Test6(void *pvParameters)
+//{
+//	for( ;; ) {
+//            vTaskDelay(100);/* solve bug */
+//    }
+//}
+//static void Test7(void *pvParameters)
+//{
+//	for( ;; ) {
+//            vTaskDelay(100);/* solve bug */
+//    }
+//}
+//static void Test8(void *pvParameters)
+//{
+//	for( ;; ) {
+//            vTaskDelay(100);/* solve bug */
+//    }
+//}
 /**
   * @brief  : Create commond line receive & send task
   * @param  : None
@@ -206,12 +261,12 @@ void cli_print_info(void)
 void cli_task_create(void)
 {
     if(xSerialRecvCharsQueue == NULL) {
-        xSerialRecvCharsQueue = xQueueCreate(100, sizeof(uint8_t));
+        xSerialRecvCharsQueue = xQueueCreate(cli_MAX_RX_QUEUE_LEN, sizeof(uint8_t));
         configASSERT(xSerialRecvCharsQueue);
     }
 
     if(xSerialSendCharsQueue == NULL) {
-        xSerialSendCharsQueue = xQueueCreate(cli_MAX_TX_QUEUE_NUM, sizeof(uint8_t) * cli_MAX_TX_QUEUE_LEN);
+        xSerialSendCharsQueue = xQueueCreate(cli_MAX_TX_QUEUE_DEPTH, sizeof(uint8_t) * cli_MAX_TX_QUEUE_LEN);
         configASSERT(xSerialSendCharsQueue);
     }
 
@@ -232,6 +287,14 @@ void cli_task_create(void)
 
     xTaskCreate(cli_task_send,    (const char *)"cliSendTask",    128, NULL, 1, NULL);
     xTaskCreate(cli_task_receive, (const char *)"cliReceiveTask", 256, NULL, 1, NULL);
+//    xTaskCreate(Test1,            (const char *)"Test1",          128, NULL, 1, NULL);
+//    xTaskCreate(Test2,            (const char *)"Test2",          128, NULL, 1, NULL);
+//    xTaskCreate(Test3,            (const char *)"Test3",          128, NULL, 1, NULL);
+//    xTaskCreate(Test4,            (const char *)"Test4",          128, NULL, 1, NULL);
+//    xTaskCreate(Test5,            (const char *)"Test5",          128, NULL, 1, NULL);
+//    xTaskCreate(Test6,            (const char *)"Test6",          128, NULL, 1, NULL);
+//    xTaskCreate(Test7,            (const char *)"Test7",          128, NULL, 1, NULL);
+//    xTaskCreate(Test8,            (const char *)"Test8",          128, NULL, 1, NULL);
 }
 
 /**

@@ -5,7 +5,7 @@
   * @Mail         : Mail
   * @Created Time : 2018年3月22日 9:25:59
   * @Version      : V1.0
-  * @Last Changed : Mon 26 Mar 2018 03:02:46 PM CST
+  * @Last Changed : 2018年3月27日 13:13:38
   * @Brief        : brief
   ********************************************************************************
   */
@@ -26,7 +26,7 @@ enum DEBUG_PRINT_INDEX {
 };
 
 typedef union {
-    struct {//baidu or google, search bit-field
+    struct {//search bit-field
 		unsigned int CLI	    :1;//LSB
 		unsigned int SYS		:1;
 		unsigned int COM        :1;
@@ -40,14 +40,9 @@ typedef union {
 #define     FALSE			            0
 #define     TRUE			            1
 
-/* CLI、SYS default OPEN & Alaways OPEN */
-#define     cli_DEBUG_DEFAULT_STATUS    0x00000003
+#define     cli_DEBUG_DEFAULT_STATUS    0x00000003  /* CLI、SYS default OPEN & Alaways OPEN */
 
-/* If you need to increase cli_MAX_TX_QUEUE_LEN,
-   you must need to increase cli_MAX_TX_QUEUE_BUG_WAIT, and you can set cli_MAX_TX_QUEUE_BUG_WAIT = 0 & input 'help' to test the BUG.
-   It is recommended that you print data more than once, instead of printing large amounts of data at a time.*/
-#define     cli_MAX_TX_QUEUE_LEN        200
-#define     cli_MAX_TX_QUEUE_BUG_WAIT   20
+#define     cli_MAX_TX_QUEUE_LEN        200         /* Define send queue parameters. */
 
 /* Exported macro define -------------------------------------------------------*/
 #define     SYS_isDebugOn               xCliDebugStatus.cliDebugStatusBit.SYS
@@ -62,7 +57,7 @@ static const char * const pcCmdLineString  = "ROOT";
 static const char * const pcWarningMessageString = "\r\n\r\n **Warning Output string length > (macro)cli_MAX_TX_QUEUE_LEN *\r\n\r\n";
 
 extern char cCliOutputString[cli_MAX_TX_QUEUE_LEN];
-extern volatile CLI_DEBUG_PEINT_STATUS xCliDebugStatus;//CLI,SYS: default open;
+extern volatile CLI_DEBUG_PEINT_STATUS xCliDebugStatus;
 
 /* Exported functions ----------------------------------------------------------*/
 extern void cli_print_info(void);//cli_task.c

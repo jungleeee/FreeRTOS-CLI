@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F4xx_StdPeriph_Templates/main.c 
+  * @file    Project/STM32F4xx_StdPeriph_Templates/main.c
   * @author  MCD Application Team
   * @version V1.8.0
   * @date    04-November-2016
@@ -16,8 +16,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -35,7 +35,7 @@
 
 /** @addtogroup Template_Project
   * @{
-  */ 
+  */
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -51,13 +51,13 @@
   */
 int main(void)
 {
-    /* Infinite */ 
+    /* Infinite */
     NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x08010000);
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
     __set_FAULTMASK(1);                 /* close all interrupt */
-    
+
     cli_task_create();
-    
+
     vTaskStartScheduler();                   /* systerm run to start */
     /* Infinite loop */
     while (1)
@@ -74,7 +74,7 @@ int main(void)
   * @retval None
   */
 void assert_failed(uint8_t* file, uint32_t line)
-{ 
+{
     /* User can add his own implementation to report the file name and line number,
        ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 

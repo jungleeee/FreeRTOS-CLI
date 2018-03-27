@@ -40,9 +40,8 @@ FreeRTOS官网提供CLI的例程，作者自写CLI之前很认真的阅读过源
 
 实现的源码在目录_Code/_APP下，源码很简单，就不做流程介绍了。主要说明几点注意事项(Notice)：<br />
 
-1、cli_task.c: function: cli_task_send(): line: 157-158:<br />
-    xSemaphoreTake(xSeriaSendCompleteBinary, portMAX_DELAY)//portMAX_DELAY, According to actual modificaton<br />
-    vTaskDelay(cli_MAX_TX_QUEUE_BUG_WAIT)//why delay? please view the header 'common.h' line 46-48<br />
+1、usart.c: line: 127-129:<br />
+    DMA_Cmd(..., DISABLE);//must disable
 
 2、common.h: line 28-37, bit-field(位域)，baidu or google。<br />
     if you need to add one bit, please reduce one bit on 'OTHER'<br />
