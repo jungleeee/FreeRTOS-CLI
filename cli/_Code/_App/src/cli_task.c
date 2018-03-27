@@ -3,9 +3,9 @@
   * @File Name    : cli_task.c
   * @Author       : Jungle
   * @Mail         : Mail
-  * @Created Time : 2018年3月20日 11:18:51
+  * @Created Time : 2018脛锚3脭脗20脠脮 11:18:51
   * @Version      : V1.0
-  * @Last Changed : 2018年3月27日 13:13:33
+  * @Last Changed : 2018脛锚3脭脗27脠脮 13:13:33
   * @Brief        : brief
   ********************************************************************************
   */
@@ -205,54 +205,6 @@ void cli_print_info(void)
     taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);//Interrupted critical area
 }
 
-//static void Test1(void *pvParameters)
-//{
-//	for( ;; ) {
-//            vTaskDelay(100);/* solve bug */
-//    }
-//}
-//static void Test2(void *pvParameters)
-//{
-//	for( ;; ) {
-//            vTaskDelay(100);/* solve bug */
-//    }
-//}
-//static void Test3(void *pvParameters)
-//{
-//	for( ;; ) {
-//            vTaskDelay(100);/* solve bug */
-//    }
-//}
-//static void Test4(void *pvParameters)
-//{
-//	for( ;; ) {
-//            vTaskDelay(100);/* solve bug */
-//    }
-//}
-//static void Test5(void *pvParameters)
-//{
-//	for( ;; ) {
-//            vTaskDelay(100);/* solve bug */
-//    }
-//}
-//static void Test6(void *pvParameters)
-//{
-//	for( ;; ) {
-//            vTaskDelay(100);/* solve bug */
-//    }
-//}
-//static void Test7(void *pvParameters)
-//{
-//	for( ;; ) {
-//            vTaskDelay(100);/* solve bug */
-//    }
-//}
-//static void Test8(void *pvParameters)
-//{
-//	for( ;; ) {
-//            vTaskDelay(100);/* solve bug */
-//    }
-//}
 /**
   * @brief  : Create commond line receive & send task
   * @param  : None
@@ -287,14 +239,6 @@ void cli_task_create(void)
 
     xTaskCreate(cli_task_send,    (const char *)"cliSendTask",    128, NULL, 1, NULL);
     xTaskCreate(cli_task_receive, (const char *)"cliReceiveTask", 256, NULL, 1, NULL);
-//    xTaskCreate(Test1,            (const char *)"Test1",          128, NULL, 1, NULL);
-//    xTaskCreate(Test2,            (const char *)"Test2",          128, NULL, 1, NULL);
-//    xTaskCreate(Test3,            (const char *)"Test3",          128, NULL, 1, NULL);
-//    xTaskCreate(Test4,            (const char *)"Test4",          128, NULL, 1, NULL);
-//    xTaskCreate(Test5,            (const char *)"Test5",          128, NULL, 1, NULL);
-//    xTaskCreate(Test6,            (const char *)"Test6",          128, NULL, 1, NULL);
-//    xTaskCreate(Test7,            (const char *)"Test7",          128, NULL, 1, NULL);
-//    xTaskCreate(Test8,            (const char *)"Test8",          128, NULL, 1, NULL);
 }
 
 /**
