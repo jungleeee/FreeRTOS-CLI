@@ -152,11 +152,11 @@ static void cli_task_receive(void *pvParameters)
   */
 static void cli_task_send(void *pvParameters)
 {
-    static uint8_t cOutputQueuePull[cli_MAX_TX_QUEUE_LEN];
+    static uint8_t cOutputQueuePop[cli_MAX_TX_QUEUE_LEN];
 
 	for( ;; ) {
-        if(xQueueReceive(xSerialSendCharsQueue, &cOutputQueuePull, cli_MAX_TX_QUEUE_WAIT) == pdTRUE) {
-            serial_cli_print_info(cOutputQueuePull, strlen((const char *)cOutputQueuePull));
+        if(xQueueReceive(xSerialSendCharsQueue, &cOutputQueuePop, cli_MAX_TX_QUEUE_WAIT) == pdTRUE) {
+            serial_cli_print_info(cOutputQueuePop, strlen((const char *)cOutputQueuePull));
             xSemaphoreTake(xSerialSendCompleteBinary, cli_MAX_TX_BINARY_DMA_WAIT);/* Wait the DMA send over & Start next */
         }
     }
