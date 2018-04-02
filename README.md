@@ -48,6 +48,12 @@ FreeRTOS官网提供CLI的例程，作者自写CLI之前很认真的阅读过源
 
 3、about submenu, please refer to the template in the file cli_register.c<br />
 
+4、The critical area problem is not considered in the program, and it is not recommended to use in interrupts, and high frequency is not recommended.
+
+5、Provide the program under the ucos system.
+
+6、Use caution if you don't do a lot of testing.
+
 [源码链接](https://github.com/jungleeee/FreeRTOS-CLI)
 
 ---
