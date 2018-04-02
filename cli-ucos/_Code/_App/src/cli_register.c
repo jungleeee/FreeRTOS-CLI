@@ -5,7 +5,7 @@
   * @Mail         : Mail
   * @Created Time : 2018年3月20日 10:21:43
   * @Version      : V1.0
-  * @Last Changed : 2018年3月27日 13:13:26
+  * @Last Changed : Mon 02 Apr 2018 05:13:10 PM CST
   * @Brief        : brief
   ********************************************************************************
   */
@@ -244,6 +244,7 @@ static void taskStackStatsShow(void)
 
     debugPrintInfo(CLI_isDebugOn, pcHeader);
 
+    /* there is a bug, all data is zero. To optimize */
     OSTaskStkChk((OS_TCB *)&startTaskTCB, &free, &used, &err);
     debugPrintInfo(CLI_isDebugOn, "startTask          %d/%d            %d   \r\n", used, free, (used * 100)/(used + free));
 
