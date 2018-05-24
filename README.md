@@ -42,17 +42,23 @@ FreeRTOS官网提供CLI的例程，作者自写CLI之前很认真的阅读过源
 
 1、usart.c: line: 127-129:<br />
     DMA_Cmd(..., DISABLE);//must disable
+    这里需要默认关闭，不然会产生一次中断，产生信号量，导致异常。
 
 2、common.h: line 28-37, bit-field(位域)，baidu or google。<br />
     if you need to add one bit, please reduce one bit on 'OTHER'<br />
+    C语言位域，定义。
 
 3、about submenu, please refer to the template in the file cli_register.c<br />
+    CLI的次级菜单，参考源码中的定义方式。有举例
 
 4、The critical area problem is not considered in the program, and it is not recommended to use in interrupts, and high frequency is not recommended.
+    打印接口，建议不要再中断中使用以及频率太高的地方使用，因为队列长度有限，消息太多会丢包。
 
 5、Provide the program under the ucos system.
+    我有移植到UcOS III 系统中使用，两个系统队列的内存分配方式不同，可以仔细看看。
 
 6、Use caution if you don't do a lot of testing.
+    如果在项目中使用的话，请小心使用，多测试其稳定信和可靠性。
 
 [源码链接](https://github.com/jungleeee/FreeRTOS-CLI)
 
