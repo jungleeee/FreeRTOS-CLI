@@ -5,7 +5,7 @@
   * @Mail         : Mail
   * @Created Time : 2018Äê3ÔÂ20ÈÕ 11:18:51
   * @Version      : V1.0
-  * @Last Changed : 2018Äê3ÔÂ27ÈÕ 13:13:33
+  * @Last Changed : Mon 16 Jul 2018 02:41:00 PM CST
   * @Brief        : brief
   ********************************************************************************
   */
@@ -46,7 +46,7 @@
 #define     cli_MAX_RX_QUEUE_WAIT       0
 
 #define     cli_MAX_TX_QUEUE_WAIT       0
-#define     cli_MAX_TX_BINARY_DMA_WAIT  20
+#define     cli_MAX_TX_BINARY_DMA_WAIT  100
 
 #define     cli_MAX_MUTEX_WAIT          200
 

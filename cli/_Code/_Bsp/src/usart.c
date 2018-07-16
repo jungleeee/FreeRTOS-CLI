@@ -5,7 +5,7 @@
   * @Mail         : Mail
   * @Created Time : 2018年3月19日 14:34:42
   * @Version      : V1.0
-  * @Last Changed : 2018年3月19日 17:53:17
+  * @Last Changed : Mon 16 Jul 2018 02:40:03 PM CST
   * @Brief        : brief
   ********************************************************************************
   */
@@ -122,7 +122,7 @@ void uart_debug_DMA_init(void (* const debugPrintOverCallBack)(void))
 
     if(debugPrintOverCallBack != NULL) uart_debug_DMA_send_over_callback_isr = (void volatile(*)(void))debugPrintOverCallBack;
 
-    DMA_Cmd(debug_uart_DMA_TX_Str, ENABLE);
+    DMA_Cmd(debug_uart_DMA_TX_Str, DISABLE);
     DMA_ClearFlag(debug_uart_DMA_TX_Str, DMA_IT_TCIF7);
     DMA_ITConfig(debug_uart_DMA_TX_Str, DMA_IT_TC, ENABLE);
     USART_DMACmd(debug_uart, USART_DMAReq_Tx, ENABLE);                          /* enable USART1 transe DMA */
